@@ -11,6 +11,7 @@ get-version:
 build:
 	@docker buildx create --use --name mybuild node-amd64
 	@docker buildx create --append --name mybuild node-arm64
+	@docker buildx use mybuild
 	@docker buildx build --platform linux/arm64,linux/amd64 --tag chromium --build-arg VERSION=$(version) $(CURRENT_DIR)
 
 test:
