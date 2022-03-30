@@ -1,11 +1,5 @@
 name: Check for updates
-
-on:
-  repository_dispatch:
-    types: check
-  schedule:
-    # every 12 hours
-    - cron:  '0 */12 * * *'
+on: [push]
 
 jobs:
   check:
@@ -83,19 +77,3 @@ jobs:
       - name: Git push
         if: steps.check_status.outputs.result == 'outdated'
         run: git push --force --tags origin master
-
-      - name: Docker GitHub Packages login
-        if: steps.check_status.outputs.result == 'outdated'
-        run: echo ${{ secrets.GITHUB_TOKEN }} | docker login --username ${{ github.actor }} --password-stdin docker.pkg.github.com
-
-      - name: Docker GitHub Packages push
-        if: steps.check_status.outputs.result == 'outdated'
-        run: docker push docker.pkg.github.com/nextools/images/${{ matrix.package }}
-
-      - name: Docker Hub login
-        if: steps.check_status.outputs.result == 'outdated'
-        run: echo ${{ secrets.DOCKER_HUB_TOKEN }} | docker login --username nextoolsbot --password-stdin
-
-      - name: Docker Hub push
-        if: steps.check_status.outputs.result == 'outdated'
-        run: docker push nextools/${{ matrix.package }}
