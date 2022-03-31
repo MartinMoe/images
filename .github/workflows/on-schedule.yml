@@ -15,7 +15,7 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v2
 
-        name: Install buildx
+      - name: Install buildx
         id: buildx
         uses: crazy-max/ghaction-docker-buildx@v1
         with:
